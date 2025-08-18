@@ -190,6 +190,7 @@ jobs:
         with:
           repository: "nanvr/NaNVR"
           ref: ${{ needs.prepare_release.outputs.release_ref }}
+          submodules: true
 
       - name: Build and install dependencies
         env:
