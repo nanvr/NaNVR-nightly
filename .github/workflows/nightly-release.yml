@@ -28,7 +28,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          $out = cargo xtask bump --nightly
+          $out = cargo xtask bump --is-nightly
           echo $out
           echo "::set-output name=version_tag::$(echo $out | sls -CaseSensitive -Pattern '^v.*$')"
           echo "::set-output name=release_ref::$(git rev-parse HEAD)"
@@ -78,7 +78,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          cargo xtask bump --nightly
+          cargo xtask bump --is-nightly
           cargo xtask package-streamer --enable-nvenc
 
       - name: Upload linux streamer
@@ -121,7 +121,7 @@ jobs:
           RUST_BACKTRACE: 1
         run: |
           cargo xtask prepare-deps --platform linux
-          cargo xtask bump --nightly
+          cargo xtask bump --is-nightly
           cargo xtask build-streamer
           tar -czvf ./build/nanvr_streamer_linux.tar.gz -C ./build nanvr_streamer_linux
 
@@ -159,7 +159,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          cargo xtask bump --nightly
+          cargo xtask bump --is-nightly
           cargo xtask package-launcher
 
       - name: Upload linux launcher
@@ -236,7 +236,7 @@ jobs:
           RUST_BACKTRACE: 1
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
-          cargo xtask bump --nightly
+          cargo xtask bump --is-nightly
           cargo xtask package-client
           cargo xtask package-client-lib
 
