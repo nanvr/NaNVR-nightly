@@ -126,7 +126,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          cargo xtask prepare-deps --platform linux
+          cargo xtask build-server-deps
           cargo xtask bump --is-nightly
           cargo xtask build-streamer
           tar -czvf ./build/nanvr_streamer.tar.gz -C ./build nanvr_streamer
