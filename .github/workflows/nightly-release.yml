@@ -25,14 +25,11 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Generate tag, set release ref
+      - name: Generate release ref
         id: gen_tag
         env:
           RUST_BACKTRACE: 1
         run: |
-          $out = cargo xtask bump --is-nightly
-          echo $out
-          echo "::set-output name=version_tag::$(echo $out | sls -CaseSensitive -Pattern '^v.*$')"
           echo "::set-output name=release_ref::$(git rev-parse HEAD)"
 
       - name: Create Release
@@ -41,12 +38,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # Release tag is taken from the gen_tag job.
-          tag_name: ${{ steps.gen_tag.outputs.version_tag }}
-          release_name: NaNVR ${{ steps.gen_tag.outputs.version_tag }}
-          # TODO: gather commit messages to post here in the body
+          release_name: NaNVR ${{ steps.gen_tag.outputs.release_ref }}
           body: |
-            Nightly release of NaNVR: ${{ steps.gen_tag.outputs.version_tag }}
+            Nightly release of NaNVR
             Generated from commit: nanvr/NaNVR@${{ steps.gen_tag.outputs.release_ref }}
           draft: true
           prerelease: false
@@ -82,7 +76,6 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          cargo xtask bump --is-nightly
           cargo xtask package-streamer --enable-nvenc
 
       - name: Upload linux streamer
@@ -127,7 +120,6 @@ jobs:
           RUST_BACKTRACE: 1
         run: |
           cargo xtask build-server-deps
-          cargo xtask bump --is-nightly
           cargo xtask build-streamer
           tar -czvf ./build/nanvr_streamer.tar.gz -C ./build nanvr_streamer
 
@@ -167,7 +159,6 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          cargo xtask bump --is-nightly
           cargo xtask package-launcher
 
       - name: Upload linux launcher
@@ -249,7 +240,6 @@ jobs:
           RUST_BACKTRACE: 1
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
-          cargo xtask bump --is-nightly
           cargo xtask package-client
           cargo xtask package-client-lib
 
