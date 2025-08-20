@@ -38,6 +38,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: ${{ steps.gen_tag.outputs.release_ref }}
           release_name: NaNVR ${{ steps.gen_tag.outputs.release_ref }}
           body: |
             Nightly release of NaNVR
