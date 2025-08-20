@@ -30,6 +30,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
+          echo "::set-output name=short_release_ref::$(git rev-parse HEAD)"
           echo "::set-output name=release_ref::$(git rev-parse --short=8 HEAD)"
 
       - name: Create Release
@@ -38,8 +39,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.gen_tag.outputs.release_ref }}
-          release_name: NaNVR ${{ steps.gen_tag.outputs.release_ref }}
+          tag_name: ${{ steps.gen_tag.outputs.short_release_ref }}
+          release_name: NaNVR ${{ steps.gen_tag.outputs.short_release_ref }}
           body: |
             Nightly release of NaNVR
             Generated from commit: nanvr/NaNVR@${{ steps.gen_tag.outputs.release_ref }}
