@@ -30,7 +30,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          echo "::set-output name=release_ref::$(git rev-parse --short HEAD)"
+          echo "::set-output name=release_ref::$(git rev-parse --short=8 HEAD)"
 
       - name: Create Release
         id: create_release
